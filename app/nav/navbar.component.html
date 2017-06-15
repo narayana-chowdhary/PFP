@@ -1,0 +1,86 @@
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a [routerLink]="['/home']" routerLinkActive="active" class="navbar-brand">{{pageTitle}}</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li>
+          <a [routerLink]="['/home']" routerLinkActive="active">Home</a>
+        </li>
+        <li>
+          <a [routerLink]="['/ads/search']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Search Ads</a>
+        </li>
+        <li>
+          <li><a [routerLink]="['/ads/0/edit']" [queryParams]="{mode: 'add'}" routerLinkActive="active">Submit a Free Ad</a>
+        </li>
+        <!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Plants 
+            <span class="caret"></span>
+            </a>
+          <ul class="dropdown-menu">
+            <li><a [routerLink]="['/ads/search']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Ads</a></li>
+            <li><a [routerLink]="['/ads/0/edit']" [queryParams]="{mode: 'add'}" routerLinkActive="active">Submit a Free Ad</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a [routerLink]="['/notimplemented']" routerLinkActive="active">Care Instructions</a></li>
+          </ul>
+        </li>-->
+        <!--Resources/People-->
+        <!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            People 
+            <span class="caret"></span>
+            </a>
+          <ul class="dropdown-menu">
+            <li><a [routerLink]="['/notimplemented']" routerLinkActive="active">Plant Exchange</a></li>
+            <li><a [routerLink]="['/notimplemented']" routerLinkActive="active">Workshops</a></li>
+            <li role="separator" class="divider"></li>
+            <li>
+              <a [routerLink]="['/notimplemented']" routerLinkActive="active">Blog</a>
+            </li>
+          </ul>
+        </li>-->
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-user"></span>
+            Welcome 
+            <span *ngIf="auth.isAuthenticated()"> {{auth.currentUser.userName}}</span>
+            <span *ngIf="!auth.isAuthenticated()"> Guest</span>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a *ngIf="!auth.isAuthenticated()" [routerLink]="['/signup']"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+              <a *ngIf="auth.isAuthenticated()" [routerLink]="['user/account/ads']"><span class="glyphicon glyphicon-th-large"></span> Ads</a>
+              <a *ngIf="auth.isAuthenticated()" [routerLink]="['user/account/profile']"><span class="glyphicon glyphicon-edit"></span> Edit Profile</a>
+              <a *ngIf="auth.isAuthenticated()" [routerLink]="['user/account/pwd']"><span class="glyphicon glyphicon-retweet"></span> Change Password</a>
+            </li>
+            <li>
+              <a *ngIf="!auth.isAuthenticated()" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+              <a *ngIf="auth.isAuthenticated()" (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+            </li>
+            <li>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <!--<form id="searchForm" class="navbar-form navbar-right" style="height: 20px">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search Ads">
+        </div>
+        <button class="btn btn-default">
+          Search
+        </button>
+      </form>-->
+    </div>
+  </div>
+</div>

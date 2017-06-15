@@ -1,0 +1,48 @@
+<div class="well thumbnail" style="padding: 0px;border-radius: 0px;">
+    <div class="fill img" style="min-height: 200px;max-height: 200px; padding: 0px;">
+        <!--<img [src]="ad?.imageUrls[0]" [alt]="ad?.adTitle" class="img-responsive">-->
+        <div>
+            <div id="{{'myCarousel'+ad.id}}" class="carousel slide" data-interval="false">
+                <!-- Indicators -->
+                <ol class="carousel-indicators" *ngIf="ad?.imageUrls.length > 1">
+                    <li data-target="'#myCarousel'+ad.id" *ngFor="let imageUrl of ad?.imageUrls; let i=index" [ngClass]="{'active': i==0 }"></li>
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item" [ngClass]="{'active': i==0 }" *ngFor="let imageUrl of ad?.imageUrls; let i=index">
+                        <img [src]="imageUrl" [alt]="ad?.adTitle">
+                    </div>
+                </div>
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="{{'#myCarousel'+ad.id}}" data-slide="prev" *ngIf="ad?.imageUrls.length > 1">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="{{'#myCarousel'+ad.id}}" data-slide="next" *ngIf="ad?.imageUrls.length > 1">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="caption">
+        <h4>
+            <a [title]="ad?.adTitle" [routerLink]="['/ads', ad.id]">{{ad?.adTitle | truncate : 20 : '...' }}</a>
+        </h4>
+        <div>
+            <span>
+                {{category[ad?.itemCategory]}} | In {{ad?.locality}}, {{ad?.cityName}}
+            </span>
+        </div>
+        <div style="margin-top: 5px;">
+            <span style="color: #696969;margin-left: 1px;">
+                    {{ad?.createDate | date:'shortDate'}}
+            </span>
+        </div>
+        <div style="text-align: center; margin-top: 5px;">
+            <a [routerLink]="['/ads', ad.id]" class="btn btn-default" style="background: #ff7700; color: #fff;">
+                <span>Read More</span>
+            </a>
+        </div>
+    </div>
+</div>

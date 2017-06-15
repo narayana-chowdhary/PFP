@@ -1,0 +1,23 @@
+<span class="glyphicon glyphicon-refresh glyphicon-spin spinner" *ngIf="loading"></span>
+<div style="background: #efefef;">
+    <nav-bar></nav-bar>
+    <div class="container" style="min-height: 450px">
+        <div class="row" style="margin-top: 20px">
+            <div id="routerDiv" class="col-xs-9">
+                <router-outlet></router-outlet>
+            </div>
+            <div class="col-md-3">
+                <router-outlet name="popup"></router-outlet>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer" style="text-align: center;">
+        <p>
+            <b>Do you have some plants/accessories to donate?</b><br>
+            <small>Post your ad FOR FREE on our site</small>
+        </p>
+        <a [routerLink]="['/ads/0/edit']" class="btn btn-default" style="width:150px; background: #ff7700; color: #fff;">
+        <span style="width:80px; color: #fff;" >Submit a Free ad</span>
+        </a>
+    </div>
+</div>

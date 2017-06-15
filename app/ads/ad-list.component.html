@@ -1,0 +1,114 @@
+<div class="panel" [@fadeInAnimation]>
+    <!--==============Header Section==============-->
+    <div class="panel-heading">
+        <h3>
+            <a [routerLink]="['/ads/search']" [queryParams]="{isback: 'true'}" style="width:80px;text-decoration: none">
+                <i class="glyphicon glyphicon-arrow-left"></i> 
+            </a> {{pageTitle}}
+        </h3>
+    </div>
+    <!--==============Records not found Section==============-->
+    <div class="panel-body" *ngIf="!ads || ads.length == 0 ">
+        <label class="control-label" for="localityId">No Ads found</label>
+    </div>
+    <div class="panel-body" *ngIf="ads && ads.length">
+        <!--==============Page Size, View type and Sorting section==============-->
+        <div class="row">
+            <div class="col-md-3" style="float:left;">
+                Page Size:
+                <select [(ngModel)]="pageSize" id="PageSizeId" (change)="setPage(1)">
+                    <option value="3" >3</option>
+                    <option value="5" >5</option>
+                    <option value="10" >10</option>
+                    <option value="20" >20</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-default" [class.active]="listView===true" (click)="listView=true" style="border:none">
+                    <i class="glyphicon glyphicon-th-list"></i>
+                    </button>
+                <button class="btn btn-default" [class.active]="listView===false" (click)="listView=false" style="border:none">
+                    <i class="glyphicon glyphicon-th"></i> 
+                    </button>
+            </div>
+            <div class="col-md-3" style="float:right;">
+                Sort by:
+                <select [(ngModel)]="sortBy" id="SortById" (change)="sortAds()">
+                    <option value="createDate" >Posted Date</option>
+                    <option value="adTitle" >ad Title</option>
+                    <option value="locality" >Locality</option>
+                </select>
+            </div>
+        </div>
+        <hr style="margin:0px;margin-bottom:5px">
+        <!--==============List View Section==============-->
+        <div class="row" *ngIf="listView">
+            <div class="col-md-10 col-md-offset-1">
+                <div *ngFor="let ad of pagedAds" style="border-width:5px;border: 1px solid #ddd;  margin:5px" class="row">
+                    <div class="col-md-2" style="padding: 5px; margin:2px;border: 1px solid #ddd;">
+                        <div>
+                            <img [src]="ad?.imageUrls[0]" [alt]="ad?.adTitle" class="img-responsive">
+                        </div>
+                    </div>
+                    <div class="col-md-7" style="padding: 5px;">
+                        <h4>
+                            <a [title]="ad?.adTitle" [routerLink]="['/ads', ad.id]">{{ad?.adTitle | truncate : 30 : '...' }}</a>
+                        </h4>
+                        <div>
+                            <span style="color: #696969;font-size: 12px;margin-left: 1px;">
+                            {{ad?.description || ad?.adTitle}}
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                              {{category[ad?.itemCategory]}} | In {{ad?.locality}}, {{ad?.cityName}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-md-offset-1" style="padding: 5px;">
+                        <div style="margin-top: 5px;">
+                            <span style="color: #696969;margin-left: 1px;">
+                            {{ad?.createDate | date:'shortDate'}}
+                            </span>
+                        </div>
+                        <div style="text-align: center; margin-top: 5px;">
+                            <a [routerLink]="['/ads', ad.id]" class="btn btn-default" style="background: #ff7700; color: #fff;">
+                                <span>Read More</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--==============Calender View Section==============-->
+        <div class="row" *ngIf="!listView">
+            <div class="col-md-12">
+                <div *ngFor="let ad of pagedAds" style="border-width:5px" class="col-sm-6 col-md-4">
+                    <ad-thumbnail [ad]="ad"></ad-thumbnail>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--==============Pager Section==============-->
+    <div class="text-center">
+
+        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+            <li [ngClass]="{disabled:pager.currentPage === 1}">
+                <a (click)="setPage(1)">First</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === 1}">
+                <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+            </li>
+            <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a (click)="setPage(page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(pager.currentPage + 1)">Next</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(pager.totalPages)">Last</a>
+            </li>
+        </ul>
+    </div>
+    <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+</div>

@@ -1,0 +1,259 @@
+<div class="panel" [@fadeInAnimation]>
+    <div class="panel-heading">
+        <h3>
+            <a (click)="onBack()" style="width:80px;text-decoration: none">
+                <i class="glyphicon glyphicon-arrow-left"></i> 
+            </a> {{pageTitle}}
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label name="mandatory" style="color: #8a6d3b;">* Indicates mandatory fields
+            </label>
+        </div>
+        <form class="form-horizontal" novalidate (ngSubmit)="saveAd()" [formGroup]="adEditForm">
+            <fieldset>
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.itemCategory }">
+                    <label class="col-md-3 control-label" for="itemCategoryId">Category:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <select class="form-control" id="itemCategoryId" formControlName="itemCategory">
+                                        <option value="" disabled selected hidden>Select a Category...</option>
+                                        <option *ngFor="let key of categories" [value]="key">{{category[key]}}</option>
+                                    </select>
+                        <span class="help-block" *ngIf="displayMessage.itemCategory">
+                                {{displayMessage.itemCategory}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.adType }">
+                    <label class="col-md-3 control-label" for="adTypeId">Ad Type:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <select class="form-control" id="adTypeId" formControlName="adType">
+                                        <option value="" disabled selected hidden>Select a ad type...</option>
+                                        <option *ngFor="let key of adTypes" [value]="key">{{adType[key]}}</option>
+                                    </select>
+                        <span class="help-block" *ngIf="displayMessage.adType">
+                                {{displayMessage.adType}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.adTitle }">
+                    <label class="col-md-3 control-label" for="adTitleId">Ad Title:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <input class="form-control" id="adTitleId" type="text" maxlength="70" placeholder="Ad Title (required)" formControlName="adTitle"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.adTitle">
+                                {{displayMessage.adTitle}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="specialCharactisticsId">Special Charactistics:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="specialCharactisticsId" type="text" maxlength="70" placeholder="example, red fragrant flowers or beautiful fall color"
+                            formControlName="specialCharactistics" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="easeOfAccessId">Ease Of Access:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="easeOfAccessId" type="text" type="text" maxlength="70" placeholder="example, easy access in parking strip, or in back yard up five steps and through a gate"
+                            formControlName="easeOfAccess" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="descriptionId">Description:</label>
+
+                    <div class="col-md-8">
+                        <textarea class="form-control" id="descriptionId" type="text" maxlength="150" rows=3 placeholder="anything else that might be of interest to a potential new owner"
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.state }">
+                    <label class="col-md-3 control-label" for="stateId">State:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <select class="form-control" id="stateId" formControlName="state" (change)="onSelect($event.target.value)">
+                                        <!--<option value="" disabled selected hidden>Select a State...</option>-->
+                            <option value="">--Select--</option>
+                            <option *ngFor="let state of states" value= {{state.id}}>{{state.name}}</option>
+                        </select>
+                        <span class="help-block" *ngIf="displayMessage.state">
+                                {{displayMessage.state}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.city }">
+                    <label class="col-md-3 control-label" for="cityId">City:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <select class="form-control" id="cityId" formControlName="city">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let city of cities | cityFilter:adEditForm.get('state').value" value= {{city.id}}>{{city.name}}</option>
+                        </select>
+                        <span class="help-block" *ngIf="displayMessage.city">
+                                {{displayMessage.city}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.locality }">
+                    <label class="col-md-3 control-label" for="localityId">Locality:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <input class="form-control" id="localityId" type="text" maxlength="20" placeholder="Locality (required)" formControlName="locality"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.locality">
+                                {{displayMessage.locality}}
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Add Images</h4>
+                    <hr>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.imageUrl }">
+                    <label class="col-md-3 control-label" for="imageUrlId">Image Url:
+                        </label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="imageUrlId" formControlName="imageUrl" [(ngModel)]="newImageUrl" type="text" maxlength="150"
+                            placeholder="url of image..." />
+                        <span class="help-block" *ngIf="displayMessage.imageUrl">
+                                {{displayMessage.imageUrl}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button class="col-md-offset-3 btn btn-primary" type="button" [disabled]="!newImageUrl || !adEditForm.get('imageUrl').valid || (ad.imageUrls && ad.imageUrls.length > 3)"
+                        (click)="addImageUrl();">Add Image
+                        </button>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-3">
+                        <span *ngFor="let imgUrl of imageUrls; let i=index" title="Delete Image">
+                            <button  class="btn btn-default col-md-3" style="width:100px;height:100px;margin:5px;" (click)="removeImage(i)">
+                            <img [src]="imgUrl" [alt]="Image" class="img-responsive">
+                            <span class="glyphicon glyphicon-remove;"></span>
+                        </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Contact Information</h4>
+                    <hr>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.postedByName }">
+                    <label class="col-md-3 control-label" for="postedByNameId">Name:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="postedByNameId" type="text" maxlength="20" placeholder="Name (required)" formControlName="postedByName"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.postedByName">
+                                {{displayMessage.postedByName}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.contactEmail }">
+                    <label class="col-md-3 control-label" for="contactEmailId">Email:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <input class="form-control" id="contactEmailId" type="text" maxlength="40" placeholder="Email (required)" formControlName="contactEmail"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.contactEmail">
+                                {{displayMessage.contactEmail}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.contactPhone }">
+                    <label class="col-md-3 control-label" for="contactPhoneId">Mobile:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-8">
+                        <input class="form-control" id="contactPhoneId" type="text" maxlength="10" placeholder="Phone (required)" formControlName="contactPhone"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.contactPhone">
+                                {{displayMessage.contactPhone}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-3 checkbox">
+                        <label>
+                            <input id="maintainPrivacyId"
+                                   type="checkbox"
+                                   formControlName = "maintainPrivacy" >
+                                   <span style="color: #696969;font-size: 12px;margin-left: 1px;">
+                            Maintain my Privacy (Interested people will first contact you via messages, you can decide when to reveal your phone number to them)
+                                   </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-3">
+                        <span>
+                            <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="!adEditForm.valid">
+                                Save
+                            </button>
+                        </span>
+                        <span>
+                            <a class="btn btn-default"
+                                [routerLink]="['/user/account/ads']">
+                                Cancel
+                            </a>
+                        </span>
+                        <span *ngIf="ad.id > 0">
+                            <button class="btn btn-danger"
+                                    type="button"
+                                    (click)="deleteAd()">
+                                Delete
+                            </button>
+                        </span>
+                        <span>
+                            <button type="button" (click)="reset()"
+                                    [disabled]="adEditForm.pristine && !imageUpdated" class="btn btn-danger">
+                                    Reset
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+</div>

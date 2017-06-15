@@ -1,0 +1,268 @@
+<div class="panel" [@fadeInAnimation]>
+    <div class="panel-body">
+        <div class="form-group">
+            <label name="mandatory" style="color: #8a6d3b;">* Indicates mandatory fields
+            </label>
+        </div>
+        <form class="form-horizontal" novalidate (ngSubmit)="saveProfile()" [formGroup]="profileForm">
+            <fieldset>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.firstName }">
+                    <label class="col-md-3 control-label" for="firstNameId">First Name:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="firstNameId" type="text" maxlength="20" placeholder="First Name (required)" formControlName="firstName"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.firstName">
+                                {{displayMessage.firstName}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.lastName }">
+                    <label class="col-md-3 control-label" for="lastNameId">Last Name:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="lastNameId" type="text" placeholder="Last Name (required)" formControlName="lastName" />
+                        <span class="help-block" *ngIf="displayMessage.lastName">
+                                {{displayMessage.lastName}}
+                        </span>
+                    </div>
+                </div>
+
+                <div formGroupName="emailGroup" [ngClass]="{'has-error': profileForm.get('emailGroup').errors }">
+                    <!--<div formGroupName="emailGroup" [ngClass]="{'has-error': displayMessage.emailGroup }">-->
+
+                    <div class="form-group" [ngClass]="{'has-error': displayMessage.email }">
+                        <label class="col-md-3 control-label" for="emailId">Email:
+                            <label name="required" style="color: #8a6d3b;">*</label>
+                        </label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="emailId" type="email" maxlength="40" placeholder="Email (required)" formControlName="email"
+                            />
+                            <span class="help-block" *ngIf="displayMessage.email">
+                                {{displayMessage.email}}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" [ngClass]="{'has-error': displayMessage.confirmEmail }">
+                        <label class="col-md-3 control-label" for="confirmEmailId">Confirm Email:
+                            <label name="required" style="color: #8a6d3b;">*</label>
+                        </label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="confirmEmailId" type="email" maxlength="40" placeholder="Confirm Email (required)" formControlName="confirmEmail"
+                            />
+                            <span class="help-block" *ngIf="displayMessage.confirmEmail">
+                                {{displayMessage.confirmEmail}}
+                        </span>
+                            <span *ngIf="profileForm.get('emailGroup').errors?.match">
+                                The confirmation does not match the email address.
+                        </span>
+                            <!--<span class="help-block" *ngIf="displayMessage.emailGroup">
+                                {{displayMessage.emailGroup}}
+                        </span>-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.mobile }">
+                    <label class="col-md-3 control-label" for="mobileId">Mobile:
+                        <label name="required" style="color: #8a6d3b;" *ngIf="profileForm.get('mobileNotification').value">*</label>
+                    </label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="mobileId" type="text" maxlength="10" placeholder="mobile" formControlName="mobile" />
+                        <span class="help-block" *ngIf="displayMessage.mobile">
+                                {{displayMessage.mobile}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Send Notifications:</label>
+                    <div class="col-md-8">
+                        <label class="checkbox-inline">
+                                <input type="checkbox" 
+                                       value="email" 
+                                       formControlName = "emailNotification">Email
+                            </label>
+                        <label class="checkbox-inline">
+                                <input type="checkbox" 
+                                       value="text" 
+                                       formControlName = "mobileNotification">Text
+                            </label>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.rating }">
+                    <label class="col-md-3 control-label" for="ratingId">Rating:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="ratingId" type="number" formControlName="rating" />
+                        <span class="help-block" *ngIf="displayMessage.rating">
+                                {{displayMessage.rating}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-8 checkbox">
+                        <label>
+                            <input id="sendEventsDetailsId"
+                                   type="checkbox"
+                                   formControlName = "sendEventsDetails" >
+                            Send notifications about upcomming events(workshop, ...) near my locality
+                        </label>
+                    </div>
+                </div>
+
+                <div *ngIf="profileForm.get('sendEventsDetails').value">
+
+                    <div formArrayName="addresses" *ngFor="let address of addresses.controls; let i=index">
+                        <div [formGroupName]="i">
+                            <hr>
+                            <h4>Address #{{i + 1}}</h4>
+                            <div class="form-group" [ngClass]="{'has-error': (addresses.get(i+'.state').touched || 
+                                              addresses.get(i+'.state').dirty) && 
+                                              !addresses.get(i+'.state').valid }">
+                                <label class="col-md-3 control-label" attr.for="{{'stateId' + i}}">State:
+                                    <label name="required" style="color: #8a6d3b;">*</label>
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="{{'stateId' + i}}" formControlName="state">
+                                        <option value="" disabled selected>Select a State...</option>
+                                        <option *ngFor="let state of states" value= {{state.id}}>{{state.name}}</option>
+                                    </select>
+                                    <span class="help-block" *ngIf="(addresses.get(i+'.state').touched || 
+                                        addresses.get(i+'.state').dirty) && addresses.get(i+'.state').errors">
+                                        <span *ngIf="addresses.get(i+'.state').errors.required">
+                                            Please select State.
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" [ngClass]="{'has-error': (addresses.get(i+'.city').touched || 
+                                              addresses.get(i+'.city').dirty) && 
+                                              !addresses.get(i+'.city').valid }">
+                                <label class="col-md-3 control-label" attr.for="{{'cityId' + i}}">City:
+                                    <label name="required" style="color: #8a6d3b;">*</label>
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="{{'cityId' + i}}" formControlName="city">
+                                        <option value="" disabled selected>Select a City...</option>
+                                        <option *ngFor="let city of cities | cityFilter:addresses.get(i+'.state').value" value= {{city.id}}>{{city.name}}</option>
+                                    </select>
+                                    <span class="help-block" *ngIf="(addresses.get(i+'.city').touched || 
+                                        addresses.get(i+'.city').dirty) && addresses.get(i+'.city').errors">
+                                        <span *ngIf="addresses.get(i+'.city').errors.required">
+                                            Please select City.
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" [ngClass]="{'has-error': (addresses.get(i+'.locality').touched || 
+                                              addresses.get(i+'.locality').dirty) && 
+                                              !addresses.get(i+'.locality').valid }">
+                                <label class="col-md-3 control-label" attr.for="{{'localityId' + i}}">Locality:
+                                    <label name="required" style="color: #8a6d3b;">*</label>
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="{{'localityId' + i}}" maxlength="20" placeholder="Locality" formControlName="locality">
+                                    <span class="help-block" *ngIf="(addresses.get(i+'.locality').touched || 
+                                        addresses.get(i+'.locality').dirty) && addresses.get(i+'.locality').errors">
+                                        <span *ngIf="addresses.get(i+'.locality').errors.required">
+                                            Please enter Locality.
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" [ngClass]="{'has-error': (addresses.get(i+'.zip').touched || 
+                                              addresses.get(i+'.zip').dirty) && 
+                                              !addresses.get(i+'.zip').valid }">
+                                <label class="col-md-3 control-label" attr.for="{{'zipId' + i}}">Zip Code:
+                                    <label name="required" style="color: #8a6d3b;">*</label>
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="{{'zipId' + i}}" maxlength="6" placeholder="Zip Code" formControlName="zip">
+                                    <span class="help-block" *ngIf="(addresses.get(i+'.zip').touched || 
+                                        addresses.get(i+'.locality').dirty) && addresses.get(i+'.zip').errors">
+                                        <span *ngIf="addresses.get(i+'.zip').errors.required">
+                                            Please enter Zip Code.
+                                        </span>
+                                    <span *ngIf="addresses.get(i+'.zip').errors.pattern">
+                                            The Zip Code must be 6 digit number.
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4 col-md-offset-2">
+                                    <span>
+                                <button class="btn btn-primary"
+                                        type="button"
+                                        (click)="removeAddress(i)">
+                                    Remove Address
+                                </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 col-md-offset-2">
+                            <span>
+                                <button class="btn btn-primary"
+                                        type="button"
+                                        (click)="addAddress()">
+                                        <span *ngIf="addresses && addresses.length > 0">
+                                            Add Another Address
+                                        </span>
+                            <span *ngIf="!addresses || addresses.length == 0">
+                                            Add Address
+                                        </span>
+                            </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" [ngClass]="{'has-error': addresses.errors}">
+                        <div class="col-md-4 col-md-offset-2">
+                            <span class="help-block" *ngIf="addresses.errors">
+                            <span *ngIf="addresses.errors.minlength">
+                                Please add at least one address to receive events notifications.
+                            </span>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="!profileForm.valid">
+                                Save
+                            </button>
+                        </span>
+                        <span>
+                            <button type="button" (click)="reset()"
+                                    [disabled]="profileForm.pristine && !addresseChanged" class="btn btn-danger">
+                                    Reset
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                
+            </fieldset>
+        </form>
+    </div>
+    <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+</div>

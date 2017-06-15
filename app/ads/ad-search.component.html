@@ -1,0 +1,65 @@
+<div class="panel" [@fadeInAnimation]>
+    <div class="panel-heading">
+        <h3>{{pageTitle}}</h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="itemCategoryId">Category:</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="itemCategoryId" [(ngModel)]="selectedCategoryId">
+                    <option *ngFor="let key of categories" [value]="key">{{category[key]}}</option>
+                </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="adTypeId">Ad Type:</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="adTypeId" [(ngModel)]="selectedAdTypeId">
+                    <option *ngFor="let key of adTypes" [value]="key">{{adType[key]}}</option>
+                </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="adTitleId">Ad Title:</label>
+                <div class="col-md-4">
+                    <input class="form-control" id="adTitleId" maxlength="50" type="text" [(ngModel)]="selectedTitle" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="stateId">State:</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="stateId" [(ngModel)]="selectedStateId" (change)="onSelect($event.target.value)">
+                <option value="0">--Select--</option>
+                <option *ngFor="let state of states" value= {{state.id}}>{{state.name}}</option>
+            </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="cityId">City:</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="cityId" [(ngModel)]="selectedCityId">
+                <option value="0">--Select--</option>
+                <option *ngFor="let city of cities | cityFilter:selectedStateId" value= {{city.id}}>{{city.name}}</option>
+            </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="localityId">Locality:</label>
+                <div class="col-md-4">
+                    <input class="form-control" id="localityId" maxlength="20" type="text" [(ngModel)]="selectedLocality" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-2">
+                    <button class="btn btn-primary" type="button" (click)="SearchAds()">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+</div>

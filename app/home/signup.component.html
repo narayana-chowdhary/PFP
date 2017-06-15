@@ -1,0 +1,81 @@
+<div class="panel" [@fadeInAnimation]>
+    <div class="panel-heading">
+        <h3>{{pageTitle}}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label name="mandatory" style="color: #8a6d3b;">* Indicates mandatory fields
+                    </label>
+        </div>
+        <div *ngIf="userNameInvalid" class="alert alert-danger">User Name already taken, try a different User Name</div>
+        <form class="form-horizontal" novalidate (ngSubmit)="signUp()" [formGroup]="signupForm">
+            <fieldset>
+
+                <div class="form-group" [ngClass]="{'has-error': displayMessage.userName }">
+
+                    <label class="col-md-3 control-label" for="userNameId">User Name:
+                        <label name="required" style="color: #8a6d3b;">*</label>
+                    </label>
+
+                    <div class="col-md-6">
+                        <input class="form-control" id="userNameId" type="text" maxlength="15" placeholder="User Name (required)" formControlName="userName"
+                        />
+                        <span class="help-block" *ngIf="displayMessage.userName">
+                                {{displayMessage.userName}}
+                        </span>
+                    </div>
+                </div>
+                <div formGroupName="passwordGroup" [ngClass]="{'has-error': signupForm.get('passwordGroup').errors }">
+                    <!--<div formGroupName="passwordGroup" [ngClass]="{'has-error': displayMessage.passwordGroup }">-->
+                    <div class="form-group" [ngClass]="{'has-error': passwordMessage}">
+                        <label class="col-md-3 control-label" for="passwordId">Password:
+                            <label name="required" style="color: #8a6d3b;">*</label>
+                        </label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" id="passwordId" type="password" maxlength="15" placeholder="Password (required)" formControlName="password"
+                            />
+                            <span class="help-block" *ngIf="displayMessage.password">
+                                {{displayMessage.password}}
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" [ngClass]="{'has-error': displayMessage.confirmPassword }">
+                        <label class="col-md-3 control-label" for="confirmPasswordId">Confirm Password:
+                            <label name="required" style="color: #8a6d3b;">*</label>
+                        </label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" id="confirmPasswordId" type="password" maxlength="15" placeholder="Confirm Password (required)"
+                                formControlName="confirmPassword" />
+                            <span class="help-block" *ngIf="displayMessage.confirmPassword">
+                                {{displayMessage.confirmPassword}}
+                        </span>
+                            <!--<span class="help-block" *ngIf="displayMessage.passwordGroup">
+                                {{displayMessage.passwordGroup}}
+                        </span>-->
+                            <span *ngIf="signupForm.get('passwordGroup').errors?.match">
+                                    The confirmation does not match the password.
+                                </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-4 col-md-offset-3">
+                        <span>
+                            <button class="btn btn-primary"
+                                    type="submit"
+                                    [disabled]="!signupForm.valid">
+                                Sign Up
+                            </button>
+                        </span>
+                        <button type="button" [routerLink]="['/ads/search']" class="btn btn-primary">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+</div>
